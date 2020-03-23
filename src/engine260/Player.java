@@ -16,11 +16,17 @@ public class Player {
     private int yPosition;
     private int xVelocity;
     private int yVelocity;
+    private int jumpTimer;
+    private boolean falling;
+    
+    //constants
+    private final int JUMPMAX;
     private final int ACCELERATION;
     private final int FRICTION;
     public final int WIDTH;
     public final int HEIGHT;
     private final int MAXSPEED;
+    private final int GRAVITY;
     
     //Control Attributes
     private MovementState ms;
@@ -33,12 +39,16 @@ public class Player {
         HEIGHT = 10;
         ACCELERATION = 1;
         FRICTION = 1;
+        GRAVITY = 1;
+        JUMPMAX = 30; //maximum frames the player can jump
         
         //set initial position
         xPosition = 50;
-        yPosition = 50;
+        yPosition = 150;
         xVelocity = 0;
         yVelocity = 0;
+        jumpTimer = 0;
+        falling = false;
         
         //hook up controls from keyboard
         ms = state;
@@ -52,6 +62,14 @@ public class Player {
     public void moveRight(){
         xVelocity += ACCELERATION;
         if(xVelocity > MAXSPEED) xVelocity = MAXSPEED;
+    }
+    public void moveUp(){
+        yVelocity -= ACCELERATION;
+        if(yVelocity < -MAXSPEED) yVelocity = -MAXSPEED;
+    }
+    public void moveDown(){
+        yVelocity += ACCELERATION;
+        if(yVelocity > MAXSPEED) yVelocity = MAXSPEED;
     }
     public void slowDown(){
         //we're applying friction here
@@ -86,6 +104,24 @@ public class Player {
         }
         if(ms.getRight()){
             moveRight();
+        }
+        
+        if(!ms.getJump() && jumpTimer > 0 && !falling){
+            jumpTimer = 0;
+            falling = true;
+        }
+        
+        if(falling){ //check falling movement before jump movement, as jump can put you in a falling state and we don't want to erase jump progress
+            moveDown();
+        }
+        
+        if(ms.getJump() && jumpTimer < JUMPMAX && !falling){ //if we're trying to jump and we're able to...
+            moveUp();
+            jumpTimer++;
+            if(jumpTimer >= JUMPMAX) {
+                falling = true;
+                jumpTimer = 0;
+            }
         }
         
         //handle friction
