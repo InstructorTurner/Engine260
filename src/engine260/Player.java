@@ -138,4 +138,13 @@ public class Player {
     public int getYPosition(){
         return yPosition;
     }
+    
+    public void land(int newYPosition){
+        if(falling){
+            falling = false;
+            jumpTimer = 0;
+            yVelocity = 0;
+            yPosition = newYPosition;
+        }
+    }
 }

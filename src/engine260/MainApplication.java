@@ -42,7 +42,10 @@ public class MainApplication extends Application{
         //set up our loop
         ms = new MovementState();
         p = new Player(ms);
-        gm = new GameModel(p);
+        gm = new GameModel();
+        Level level1 = new Level(p);
+        gm.setCurrentLevel(level1);
+        
         AnimationTimer loop = new AnimationTimer(){ //animationTimer will call handle() once every 60th of a second once started
             public void handle(long time){
                 //for now, we'll be clamping our loop down to the provided
@@ -60,7 +63,7 @@ public class MainApplication extends Application{
                 
                 //render
                 //we'll move this to its own class later as well
-                draw(g);
+                gm.draw(g);
             }
         };
         
@@ -99,13 +102,6 @@ public class MainApplication extends Application{
         //start the loop
         loop.start();
     }
-    
-    private void draw(GraphicsContext g){
-        g.setFill(Color.WHITE);
-        g.fillRect(0,0,400,400);
-        
-        g.setFill(Color.RED);
-        g.fillRect(p.getXPosition(), p.getYPosition(), p.WIDTH, p.HEIGHT);
-    }
+   
     
 }
