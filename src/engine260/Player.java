@@ -147,4 +147,13 @@ public class Player {
             yPosition = newYPosition;
         }
     }
+    
+    public void restart(int x, int y){
+        xPosition = x;
+        yPosition = y;
+        xVelocity = 0;
+        yVelocity = 0;
+        falling = false;
+        jumpTimer = 0;
+    }
 }
