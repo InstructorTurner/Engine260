@@ -21,10 +21,7 @@ import javafx.stage.Stage;
  */
 public class MainApplication extends Application{
     
-    GameModel gm;
-    MovementState ms;
-    Player p;
-    
+   
     public static void main(String[] args) {
         launch(args);
     }
@@ -40,10 +37,12 @@ public class MainApplication extends Application{
         GraphicsContext g = level.getGraphicsContext2D();
         
         //set up our loop
-        ms = new MovementState();
-        p = new Player(ms);
-        gm = new GameModel();
-        Level level1 = new Level(p);
+        MovementState ms = new MovementState();
+        PlayerModel pm = new PlayerModel();
+        PlayerView pv = new PlayerView(pm);
+        PlayerController pc = new PlayerController(pm, pv, ms);
+        GameManager gm = new GameManager();
+        Level level1 = new Level(pc);
         gm.setCurrentLevel(level1);
         
         AnimationTimer loop = new AnimationTimer(){ //animationTimer will call handle() once every 60th of a second once started

@@ -11,17 +11,17 @@ import javafx.scene.canvas.GraphicsContext;
  *
  * @author Steven Turner
  */
-public class GameModel {
+public class GameManager {
     
     //GameModel has been reconfigured to let the currentLevel manage what's happening
-    //We'll give GameModel more functionality later when it needs to manage multiple levels
+    //We'll give GameManager more functionality later when it needs to manage multiple levels
     
     
     //attributes
     Level currentLevel;
     
     //constructor
-    public GameModel(){
+    public GameManager(){
 
     }
     

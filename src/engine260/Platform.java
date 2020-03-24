@@ -9,9 +9,8 @@ package engine260;
  *
  * @author Steven Turner
  */
-public class Platform {
+public class Platform extends PositionalObject{
     //attributes
-    private int xPosition, yPosition, width, height;
     
     //constructor
     public Platform(int xPosition, int yPosition, int width, int height){
@@ -22,19 +21,5 @@ public class Platform {
     }
     
     //methods
-    public void update(){
-        
-    }
-    public int getXPosition(){
-        return xPosition;
-    }
-    public int getYPosition(){
-        return yPosition;
-    }
-    public int getWidth(){
-        return width;
-    }
-    public int getHeight(){
-        return height;
-    }
+
 }

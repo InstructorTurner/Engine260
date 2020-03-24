@@ -16,60 +16,71 @@ import javafx.scene.paint.Color;
  */
 public class Level {
     //attributes
-    List<Platform> platforms = new ArrayList<>();
-    Player p;
+    List<PositionalObject> backgroundObjects = new ArrayList<>();
+    PlayerController playerController;
     boolean goalReached;
     int startingX;
     int startingY;
-    int goalX;
-    int goalY;
+    Goal goal;
+    CollisionManager collisionManager;
     
     //constructor
-    public Level(Player thePlayer){
+    public Level(PlayerController pc){
         startingX = 0;
         startingY = 180;
         goalReached = false;
-        p = thePlayer;
-        p.restart(startingX, startingY);
-        goalX = 200;
-        goalY = 190;
-        platforms.add(new Platform(0, 200, 80, 10));
-        platforms.add(new Platform(120, 200, 100, 10));
+        playerController = pc;
+        pc.restart(startingX, startingY);
+        goal = new Goal(200, 190, 10, 10);
+        backgroundObjects.add(goal);
+        backgroundObjects.add(new Platform(0, 200, 80, 10));
+        backgroundObjects.add(new Platform(120, 200, 100, 10));
+        
+        //We should be passing in the collisionManager, but we'll worry about that
+        //when it makes sense to.  I should try to not get too ahead of myself.
+        collisionManager = new CollisionManager();
+        
+        //set up collisionActions using Lambda Notation
+        collisionManager.addCollisionListener((primary, other) ->{
+            if(primary instanceof PlayerModel && other instanceof Platform){
+                PlayerModel model = (PlayerModel) primary;
+                Platform platform = (Platform) other;
+                model.land(platform.getYPosition() - platform.getHeight());
+            }
+            if(primary instanceof PlayerModel && other instanceof Goal){
+                goalReached = true;
+            }
+        });
     }
     
     //methods
     public void update(){
-        p.update();
+        playerController.update();
         
-        //as stated below, a Level shouldn't be in charge of handling collisions.
-        //We'll need to change this.
-        handleCollisions();
-        
-        
+        //Check collisions for the level
+        collisionManager.handleCollisions(playerController.getCollisionArea(), backgroundObjects);
     }
     
-    //Hmm... letting the Level manage drawing seems like a violation of the Single Responsibility principle.
-    //A level should just manage the items inside of a level
-    //We'll need to think of a way to separate out all the drawing logic somewhere else
-    //...Perhaps a "Drawable" interface?
+    //Now the level is just drawing itself, which is a little better
+    //We may need to still tweak this in the future
     public void draw(GraphicsContext g){
         //draw background
         g.setFill(Color.WHITE);
         g.fillRect(0,0,400,400);
         
-        //draw platforms
-        g.setFill(Color.BLUE);
-        for(Platform platform : platforms){
-            g.fillRect(platform.getXPosition(), platform.getYPosition(), platform.getWidth(), platform.getHeight());
+        //draw level stuff
+        for(PositionalObject item : backgroundObjects){
+            if(item instanceof Platform){
+                g.setFill(Color.BLUE);
+            }
+            if(item instanceof Goal){
+                g.setFill(Color.GREEN);
+            }
+            g.fillRect(item.getXPosition(), item.getYPosition(), item.getWidth(), item.getHeight());
         }
         
         //draw player
-        g.setFill(Color.RED);
-        g.fillRect(p.getXPosition(), p.getYPosition(), p.WIDTH, p.HEIGHT);
-        
-        //draw goal
-        g.setFill(Color.GREEN);
-        g.fillRect(goalX, goalY, 10, 10);
+        playerController.draw(g);
         
         //draw win screen
         if(goalReached){
@@ -77,44 +88,6 @@ public class Level {
         }
     }
     
-    //Handling collisions DEFINITELY shouldn't be managed by the level,
-    //but let's just get it working before we worry about refactoring
-    private void handleCollisions(){
-        //check platform collision
-        for(Platform platform : platforms){
-            //if the player overlaps with a platform, it's colliding
-            if(isColliding(p, platform)){
-                p.land(platform.getYPosition() - platform.getHeight()); //land the player on the top of the platform
-            }
-        }
-        //check goal collision
-        if(
-                p.getXPosition() + p.WIDTH >= goalX
-                && p.getXPosition() <= goalX + 10
-                && p.getYPosition() + p.HEIGHT >= goalY
-                && p.getYPosition() <= goalY + 10
-                ){
-            goalReached = true;
-        }
-    }
-    //Programming to concretions instead of abstractions, also bad.  This needs to be changed later.
-    private boolean isColliding(Player p, Platform platform){
-        int playerRightSide = p.getXPosition() + p.WIDTH;
-        int playerLeftSide = p.getXPosition();
-        int playerTopSide = p.getYPosition();
-        int playerBottomSide = p.getYPosition() + p.HEIGHT;
-        
-        int platformRightSide = platform.getXPosition() + platform.getWidth();
-        int platformLeftSide = platform.getXPosition();
-        int platformTopSide = platform.getYPosition();
-        int platformBottomSide = platform.getYPosition() + platform.getHeight();
-        
-        return (
-                playerRightSide >= platformLeftSide
-                && playerLeftSide <= platformRightSide
-                && playerBottomSide >= platformTopSide
-                && playerTopSide <= platformBottomSide
-                );
-    }
+
     
 }
