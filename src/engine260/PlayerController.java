@@ -64,8 +64,22 @@ public class PlayerController implements Updateable, Drawable{
         pm.restart(x, y);
     }
     
-    public PlayerModel getModel(){
-        return pm;
+   //Return Objects for Collision Handling
+    public CollisionBody getPlayerBody(){
+        return new CollisionBody(pm.getWidth(), pm.getHeight(), pm.getXPosition(), pm.getYPosition());
+    }
+    public CollisionBody getPlayerFeet(){ //return an object to represent just where the player's feet are
+        return new CollisionBody(pm.getWidth(), 0, pm.getXPosition(), pm.getYPosition() + 1);
+    }
+    
+    public void land(int y){
+        pm.land(y);
+    }
+    public boolean hasJumped(){
+        return pm.hasJumped();
+    }
+    public void startFalling(){
+        pm.startFalling();
     }
     
 }

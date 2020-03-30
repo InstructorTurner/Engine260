@@ -7,6 +7,7 @@ package engine260;
 
 import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
 
 /**
  *
@@ -17,12 +18,10 @@ public class GameManager {
     //attributes
     Level currentLevel;
     PlayerController playerController;
-    CollisionManager collisionManager;
     
     //constructor
     public GameManager(PlayerController pc){
         playerController = pc;
-        collisionManager = new CollisionManager();
     }
     
     //methods
@@ -38,36 +37,55 @@ public class GameManager {
         checkCollisions();
     }
     
+    public void draw(GraphicsContext g){
+        drawBackground(g);
+        currentLevel.draw(g);
+        playerController.draw(g);
+    }
+    
     public void setCurrentLevel(Level level){
         currentLevel = level;
     }
     
-    public void draw(GraphicsContext g){
-        currentLevel.draw(g);
+    
+    private void drawBackground(GraphicsContext g){
+        //draw background
+        g.setFill(Color.WHITE);
+        g.fillRect(0,0,400,400);
     }
     
     private void checkCollisions(){
-        PlayerModel model = playerController.getModel();
+        //get the objects to check collisions
+        CollisionBody playerBody = playerController.getPlayerBody();
+        CollisionBody playerFeet = playerController.getPlayerFeet();
         List<PositionalObject> backgroundObjects = currentLevel.getBackgroundObjects();
+        //set a flag so we know if the player walked off a platform without jumping
         boolean playerOnGround = false;
+        
+        //check for collisions on all the objects
         for(PositionalObject backgroundObject : backgroundObjects){
-            if(collisionManager.isColliding(model.getFootPosition(), backgroundObject)){
+            //if the player's feet collide with anything, they're on solid ground
+            if(CollisionManager.isColliding(playerFeet, backgroundObject)){
                 playerOnGround = true;
             }
-            if(collisionManager.isColliding(model, backgroundObject)){
+            //if the player's body is colliding with anything, handle that
+            if(CollisionManager.isColliding(playerBody, backgroundObject)){
+                //if it's a platform...
                 if(backgroundObject instanceof Platform){
-                    model.land(backgroundObject.getYPosition() - backgroundObject.getHeight());
+                    playerController.land(backgroundObject.getYPosition() - backgroundObject.getHeight());
                     playerOnGround = true;
                 }
-                
+                //if it's the goal...
                 if(backgroundObject instanceof Goal){
                     currentLevel.setGoalReached();
                 }
             }
             
         }
-        if(!playerOnGround && !playerController.getModel().hasJumped()){
-            playerController.getModel().startFalling();
+        
+        //if the player's feet never collided with anything
+        if(!playerOnGround && !playerController.hasJumped()){
+            playerController.startFalling();
         }
     }
 }

@@ -5,16 +5,25 @@
  */
 package engine260;
 
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+
 /**
  *
  * @author Steven Turner
  */
-public class Goal extends PositionalObject{
+public class Goal extends PositionalObject implements Drawable{
     
     public Goal(int x, int y, int h, int w){
         this.xPosition = x;
         this.yPosition = y;
         this.width = w;
         this.height = h;
+    }
+
+    @Override
+    public void draw(GraphicsContext g) {
+        g.setFill(Color.GREEN);
+        g.fillRect(this.getXPosition(), this.getYPosition(), this.getWidth(), this.getHeight());
     }
 }

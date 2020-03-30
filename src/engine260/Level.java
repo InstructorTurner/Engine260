@@ -8,7 +8,6 @@ package engine260;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 /**
  *
@@ -17,12 +16,12 @@ import javafx.scene.paint.Color;
 public class Level {
     //attributes
     List<PositionalObject> backgroundObjects = new ArrayList<>();
+    List<Drawable> drawableObjects = new ArrayList<>();
     PlayerController playerController;
     boolean goalReached;
     int startingX;
     int startingY;
     Goal goal;
-    CollisionManager collisionManager;
     
     //constructor
     public Level(PlayerController pc){
@@ -33,43 +32,31 @@ public class Level {
         pc.restart(startingX, startingY);
         goal = new Goal(200, 190, 10, 10);
         backgroundObjects.add(goal);
-        backgroundObjects.add(new Platform(0, 200, 80, 10));
-        backgroundObjects.add(new Platform(120, 200, 100, 10));
+        drawableObjects.add(goal);
         
-        //We should be passing in the collisionManager, but we'll worry about that
-        //when it makes sense to.  I should try to not get too ahead of myself.
-        collisionManager = new CollisionManager();
+        //create and add platforms
+        Platform platform = new Platform(0,200,80,10);
+        backgroundObjects.add(platform);
+        drawableObjects.add(platform);
+        platform = new Platform(120, 200, 100, 10);
+        backgroundObjects.add(platform);
+        drawableObjects.add(platform);
         
     }
     
     //methods
     public void update(){
-        //playerController.update();
+        //update enemies and platforms
         
-        //Check collisions for the level
-        //checkCollisions();
     }
     
     //Now the level is just drawing itself, which is a little better
-    //We may need to still tweak this in the future
     public void draw(GraphicsContext g){
-        //draw background
-        g.setFill(Color.WHITE);
-        g.fillRect(0,0,400,400);
-        
+                
         //draw level stuff
-        for(PositionalObject item : backgroundObjects){
-            if(item instanceof Platform){
-                g.setFill(Color.BLUE);
-            }
-            if(item instanceof Goal){
-                g.setFill(Color.GREEN);
-            }
-            g.fillRect(item.getXPosition(), item.getYPosition(), item.getWidth(), item.getHeight());
+        for(Drawable drawObject : drawableObjects){
+            drawObject.draw(g);
         }
-        
-        //draw player
-        playerController.draw(g);
         
         //draw win screen
         if(goalReached){

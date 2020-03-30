@@ -5,25 +5,15 @@
  */
 package engine260;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
  * @author Steven Turner
  */
 public class CollisionManager {
-    //attributes
 
-    
-    //constructor
-    public CollisionManager(){
 
-    }
-    
-    //methods
-
-    public boolean isColliding(PositionalObject primary, PositionalObject secondary){
+    public static boolean isColliding(PositionalObject primary, PositionalObject secondary){
     
         return (
                     primary.getRightSide() >= secondary.getLeftSide()

@@ -139,7 +139,4 @@ public class PlayerModel extends PositionalObject implements  Updateable, Horizo
         return jumping == false && jumpTimer < JUMPMAX && !falling;
     }
     
-    public CollisionBody getFootPosition(){
-        return new CollisionBody(this.width, this.height, this.xPosition, this.yPosition);
-    }
 }

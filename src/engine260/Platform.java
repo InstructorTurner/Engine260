@@ -5,11 +5,14 @@
  */
 package engine260;
 
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.paint.Color;
+
 /**
  *
  * @author Steven Turner
  */
-public class Platform extends PositionalObject{
+public class Platform extends PositionalObject implements Drawable{
     //attributes
     
     //constructor
@@ -21,5 +24,11 @@ public class Platform extends PositionalObject{
     }
     
     //methods
+
+    @Override
+    public void draw(GraphicsContext g) {
+        g.setFill(Color.BLUE);
+        g.fillRect(this.getXPosition(), this.getYPosition(), this.getWidth(), this.getHeight());
+    }
 
 }
