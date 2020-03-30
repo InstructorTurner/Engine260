@@ -64,7 +64,7 @@ public class PlayerController implements Updateable, Drawable{
         pm.restart(x, y);
     }
     
-    public PositionalObject getCollisionArea(){
+    public PlayerModel getModel(){
         return pm;
     }
     

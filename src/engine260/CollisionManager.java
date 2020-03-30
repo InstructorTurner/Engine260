@@ -14,20 +14,15 @@ import java.util.List;
  */
 public class CollisionManager {
     //attributes
-    List<CollisionAction> actions;
+
     
     //constructor
     public CollisionManager(){
-        actions = new ArrayList<>();
+
     }
     
     //methods
-    public void addCollisionListener(CollisionAction action){
-        actions.add(action);
-    }
-    public void removeCollisionListener(CollisionAction action){
-        actions.remove(action);
-    }
+
     public boolean isColliding(PositionalObject primary, PositionalObject secondary){
     
         return (
@@ -38,13 +33,4 @@ public class CollisionManager {
                 );
     }
     
-    public void handleCollisions(PositionalObject primary, List<PositionalObject> collisionList){
-        for(PositionalObject other : collisionList){
-            if(isColliding(primary, other)){
-                for(CollisionAction action : actions){
-                    action.handle(primary, other);
-                }
-            }
-        }
-    }
 }

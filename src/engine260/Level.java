@@ -40,17 +40,6 @@ public class Level {
         //when it makes sense to.  I should try to not get too ahead of myself.
         collisionManager = new CollisionManager();
         
-        //set up collisionActions using Lambda Notation
-        collisionManager.addCollisionListener((primary, other) ->{
-            if(primary instanceof PlayerModel && other instanceof Platform){
-                PlayerModel model = (PlayerModel) primary;
-                Platform platform = (Platform) other;
-                model.land(platform.getYPosition() - platform.getHeight());
-            }
-            if(primary instanceof PlayerModel && other instanceof Goal){
-                goalReached = true;
-            }
-        });
     }
     
     //methods
@@ -58,7 +47,7 @@ public class Level {
         playerController.update();
         
         //Check collisions for the level
-        collisionManager.handleCollisions(playerController.getCollisionArea(), backgroundObjects);
+        checkCollisions();
     }
     
     //Now the level is just drawing itself, which is a little better
@@ -88,6 +77,28 @@ public class Level {
         }
     }
     
-
+    private void checkCollisions(){
+        PlayerModel model = playerController.getModel();
+        boolean playerOnGround = false;
+        for(PositionalObject backgroundObject : backgroundObjects){
+            if(collisionManager.isColliding(model.getFootPosition(), backgroundObject)){
+                playerOnGround = true;
+            }
+            if(collisionManager.isColliding(model, backgroundObject)){
+                if(backgroundObject instanceof Platform){
+                    model.land(backgroundObject.getYPosition() - backgroundObject.getHeight());
+                    playerOnGround = true;
+                }
+                
+                if(backgroundObject instanceof Goal){
+                    goalReached = true;
+                }
+            }
+            
+        }
+        if(!playerOnGround && !playerController.getModel().hasJumped()){
+            playerController.getModel().startFalling();
+        }
+    }
     
 }
