@@ -17,7 +17,6 @@ public class PlayerModel extends PositionalObject implements  Updateable, Horizo
     private int jumpTimer;
     private boolean falling;
     private boolean jumping;
-    private boolean walkingOnAir;
     private PhysicsRules physics;
     
     //constants
@@ -41,7 +40,6 @@ public class PlayerModel extends PositionalObject implements  Updateable, Horizo
         falling = false;
         jumping = false;
         
-        //set "feet"
     }
     
     //methods
@@ -91,9 +89,6 @@ public class PlayerModel extends PositionalObject implements  Updateable, Horizo
     public void update(){
         
         //if nothing is below player, they should start falling
-        if(!falling && walkingOnAir){
-            startFalling();
-        }
         if(falling){ //check falling movement before jump movement, as jump can put you in a falling state and we don't want to erase jump progress
             moveDown();
         }
@@ -113,7 +108,6 @@ public class PlayerModel extends PositionalObject implements  Updateable, Horizo
         if(falling){
             falling = false;
             jumping = false;
-            walkingOnAir = false;
             jumpTimer = 0;
             yVelocity = 0;
             yPosition = newYPosition;
@@ -126,7 +120,6 @@ public class PlayerModel extends PositionalObject implements  Updateable, Horizo
         xVelocity = 0;
         yVelocity = 0;
         falling = false;
-        walkingOnAir = false;
         jumpTimer = 0;
     }
     
@@ -141,7 +134,6 @@ public class PlayerModel extends PositionalObject implements  Updateable, Horizo
         jumpTimer = 0;
         falling = true;
         jumping = false;
-        walkingOnAir = false;
     }
     public boolean isGrounded(){
         return jumping == false && jumpTimer < JUMPMAX && !falling;

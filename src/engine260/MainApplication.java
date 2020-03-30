@@ -41,7 +41,7 @@ public class MainApplication extends Application{
         PlayerModel pm = new PlayerModel();
         PlayerView pv = new PlayerView(pm);
         PlayerController pc = new PlayerController(pm, pv, ms);
-        GameManager gm = new GameManager();
+        GameManager gm = new GameManager(pc);
         Level level1 = new Level(pc);
         gm.setCurrentLevel(level1);
         

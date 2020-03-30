@@ -44,10 +44,10 @@ public class Level {
     
     //methods
     public void update(){
-        playerController.update();
+        //playerController.update();
         
         //Check collisions for the level
-        checkCollisions();
+        //checkCollisions();
     }
     
     //Now the level is just drawing itself, which is a little better
@@ -77,28 +77,12 @@ public class Level {
         }
     }
     
-    private void checkCollisions(){
-        PlayerModel model = playerController.getModel();
-        boolean playerOnGround = false;
-        for(PositionalObject backgroundObject : backgroundObjects){
-            if(collisionManager.isColliding(model.getFootPosition(), backgroundObject)){
-                playerOnGround = true;
-            }
-            if(collisionManager.isColliding(model, backgroundObject)){
-                if(backgroundObject instanceof Platform){
-                    model.land(backgroundObject.getYPosition() - backgroundObject.getHeight());
-                    playerOnGround = true;
-                }
-                
-                if(backgroundObject instanceof Goal){
-                    goalReached = true;
-                }
-            }
-            
-        }
-        if(!playerOnGround && !playerController.getModel().hasJumped()){
-            playerController.getModel().startFalling();
-        }
+    public List<PositionalObject> getBackgroundObjects(){
+        return backgroundObjects;
+    }
+    
+    public void setGoalReached(){
+        goalReached = true;
     }
     
 }
