@@ -21,18 +21,34 @@ public class GameManager {
     List<Level> levelList;
     PlayerController playerController;
     boolean paused;
+    boolean betweenLevels;
+    int interstitialCount;
+    Interstitial interstitial;
     
     //constructor
     public GameManager(PlayerController pc){
         playerController = pc;
         paused = false;
+        betweenLevels = false;
+        interstitialCount = 0;
         
         levelList = new LinkedList<>();
     }
     
     //methods
     public void update(){
-        if(!paused){
+        //if we're between levels (you just beat a level
+        if(betweenLevels){
+            //count to 5 seconds to show an interstitial screen
+            if(interstitialCount < 300){
+                interstitialCount++;
+            } else { //if the count is up...
+                //turn off the interstitial and get back to the game
+                betweenLevels = false;
+                interstitialCount = 0;
+            }
+        }
+        else if(!paused){
             //currentLevel.update();
             //update the player
             playerController.update();
@@ -52,9 +68,13 @@ public class GameManager {
     }
     
     public void draw(GraphicsContext g){
-        drawBackground(g);
-        currentLevel.draw(g);
-        playerController.draw(g);
+        if(betweenLevels){
+            interstitial.draw(g);
+        } else {
+            drawBackground(g);
+            currentLevel.draw(g);
+            playerController.draw(g);
+        }
     }
     
     public void setCurrentLevel(Level level){
@@ -133,6 +153,8 @@ public class GameManager {
         if(!levelList.isEmpty()){
             currentLevel = levelList.get(0);
             levelList.remove(0);
+            betweenLevels = true;
+            interstitial = new Interstitial("Next Level");
         }
     }
 }
