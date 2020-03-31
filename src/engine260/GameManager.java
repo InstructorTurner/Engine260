@@ -58,34 +58,43 @@ public class GameManager {
         //get the objects to check collisions
         CollisionBody playerBody = playerController.getPlayerBody();
         CollisionBody playerFeet = playerController.getPlayerFeet();
-        List<PositionalObject> backgroundObjects = currentLevel.getBackgroundObjects();
         //set a flag so we know if the player walked off a platform without jumping
         boolean playerOnGround = false;
         
         //check for collisions on all the objects
-        for(PositionalObject backgroundObject : backgroundObjects){
+        for(PositionalObject platform : currentLevel.getPlatforms()){
             //if the player's feet collide with anything, they're on solid ground
-            if(CollisionManager.isColliding(playerFeet, backgroundObject)){
+            if(CollisionManager.isColliding(playerFeet, platform)){
                 playerOnGround = true;
             }
             //if the player's body is colliding with anything, handle that
-            if(CollisionManager.isColliding(playerBody, backgroundObject)){
-                //if it's a platform...
-                if(backgroundObject instanceof Platform){
-                    playerController.land(backgroundObject.getYPosition() - backgroundObject.getHeight());
-                    playerOnGround = true;
-                }
-                //if it's the goal...
-                if(backgroundObject instanceof Goal){
-                    currentLevel.setGoalReached();
-                }
+            if(CollisionManager.isColliding(playerBody, platform)){
+                playerController.land(platform.getYPosition() - platform.getHeight());
+                playerOnGround = true;
             }
-            
         }
-        
         //if the player's feet never collided with anything
         if(!playerOnGround && !playerController.hasJumped()){
             playerController.startFalling();
+        }
+        
+        //check goal collision
+        if(CollisionManager.isColliding(playerBody, currentLevel.getGoal())){
+            currentLevel.setGoalReached();
+        }
+        
+        //check enemy collision
+        for(Enemy enemy : currentLevel.getEnemies()){
+            //if an enemy hits a player
+            if(CollisionManager.isColliding(playerBody, enemy)){
+                //player restarts
+                playerController.restart(currentLevel.getStartingX(), currentLevel.getStartingY());
+            }
+            
+            //if the enemy has walked off its home platform, turn it around
+            if(!CollisionManager.isColliding(enemy, enemy.getHomePlatform())){
+                enemy.reverseDirection();
+            }
         }
     }
 }
