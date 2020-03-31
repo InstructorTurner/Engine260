@@ -11,6 +11,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -22,6 +23,17 @@ import javafx.stage.Stage;
  */
 public class MainApplication extends Application{
     
+    //gameplay view elements
+    BorderPane gamePanel;
+    GameManager gm;
+    AnimationTimer loop;
+    MovementState ms;
+    Scene gameScene;
+    
+    //title screen elements
+    BorderPane startPanel;
+    Scene startScene;
+    
    
     public static void main(String[] args) {
         launch(args);
@@ -29,27 +41,60 @@ public class MainApplication extends Application{
 
     @Override
     public void start(Stage stage) throws Exception {
+        //configure screens
+        setupStartView(stage);
+        setupGameView(stage);
+        
+        startStartView(stage);
+
+    }
+    
+    private void setupStartView(Stage stage){
+        //set up Start screen
+        startPanel = new BorderPane();
+        Label title = new Label("Cube Adventure");
+        Button startButton = new Button("start");
+        
+        startPanel.setCenter(title);
+        startPanel.setBottom(startButton);
+        
+        startPanel.setPrefHeight(400);
+        startPanel.setPrefWidth(400);
+        
+        startButton.setOnAction((e)->{
+            startGameView(stage);
+        });
+        
+        startScene = new Scene(startPanel);
+    }
+    
+    private void startStartView(Stage stage){
+        stage.setScene(startScene);
+        stage.show();
+    }
+    
+    private void setupGameView(Stage stage){
         //create the main container for our game elements
-        BorderPane rootPanel = new BorderPane();
+        gamePanel = new BorderPane();
         
         //set up a canvas to act as a level
         Canvas level = new Canvas(400,400);
-        rootPanel.setCenter(level);
+        gamePanel.setCenter(level);
         GraphicsContext g = level.getGraphicsContext2D();
         
         //set up our loop
-        MovementState ms = new MovementState();
+        ms = new MovementState();
         PlayerModel pm = new PlayerModel();
         PlayerView pv = new PlayerView(pm);
         PlayerController pc = new PlayerController(pm, pv, ms);
-        GameManager gm = new GameManager(pc);
+        gm = new GameManager(pc);
         //Create our Levels
         Level level1 = LevelContainer.createLevel1(pc);
         Level level2 = LevelContainer.createLevel2(pc);
         gm.setCurrentLevel(level1);
         gm.addLevel(level2);
         
-        AnimationTimer loop = new AnimationTimer(){ //animationTimer will call handle() once every 60th of a second once started
+        loop = new AnimationTimer(){ //animationTimer will call handle() once every 60th of a second once started
             public void handle(long time){
                 //for now, we'll be clamping our loop down to the provided
                 //60fps from AnimationTimer.
@@ -65,7 +110,6 @@ public class MainApplication extends Application{
                 gm.update();
                 
                 //render
-                //we'll move this to its own class later as well
                 gm.draw(g);
             }
         };
@@ -74,23 +118,24 @@ public class MainApplication extends Application{
         HBox menu = new HBox();
         Button pauseButton = new Button("Pause");
         menu.getChildren().add(pauseButton);
-        rootPanel.setTop(menu);
+        gamePanel.setTop(menu);
         
         //set pause button control
         pauseButton.setOnAction((e) -> {
             gm.togglePause();
         });
         
-             
-        //plug FX stuff together to start the application
-        Scene scene = new Scene(rootPanel);
-        stage.setScene(scene);
-        stage.show();
+        gameScene = new Scene(gamePanel);
+    }
+    
+    private void startGameView(Stage stage){
+
+        stage.setScene(gameScene);
         
         //hook up keyboard input
         //Since we're watching the key release event on the scene, 
         //we should be reading input as long as the window is in focus
-        scene.setOnKeyPressed((e) -> {
+        gameScene.setOnKeyPressed((e) -> {
             if(e.getCode() == KeyCode.LEFT){
                 ms.leftOn();
             }
@@ -101,7 +146,7 @@ public class MainApplication extends Application{
                 ms.jumpOn();
             }
         });
-        scene.setOnKeyReleased((e) -> {
+        gameScene.setOnKeyReleased((e) -> {
             if(e.getCode() == KeyCode.LEFT){
                 ms.leftOff();
             }
@@ -115,6 +160,7 @@ public class MainApplication extends Application{
         
         //start the loop
         loop.start();
+        
     }
    
     

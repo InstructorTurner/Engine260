@@ -22,6 +22,7 @@ public class GameManager {
     PlayerController playerController;
     boolean paused;
     boolean betweenLevels;
+    boolean gameOver;
     int interstitialCount;
     Interstitial interstitial;
     
@@ -30,6 +31,7 @@ public class GameManager {
         playerController = pc;
         paused = false;
         betweenLevels = false;
+        gameOver = false;
         interstitialCount = 0;
         
         levelList = new LinkedList<>();
@@ -48,7 +50,7 @@ public class GameManager {
                 interstitialCount = 0;
             }
         }
-        else if(!paused){
+        else if(!paused && !gameOver){
             //currentLevel.update();
             //update the player
             playerController.update();
@@ -68,7 +70,7 @@ public class GameManager {
     }
     
     public void draw(GraphicsContext g){
-        if(betweenLevels){
+        if(betweenLevels || gameOver){
             interstitial.draw(g);
         } else {
             drawBackground(g);
@@ -116,6 +118,11 @@ public class GameManager {
             playerController.startFalling();
         }
         
+        //if the player has fallen off the stage
+        if(playerBody.getYPosition() > 400){
+            losePlayerLife();
+        }
+        
         //check goal collision
         if(CollisionManager.isColliding(playerBody, currentLevel.getGoal())){
             currentLevel.setGoalReached();
@@ -142,6 +149,8 @@ public class GameManager {
             playerController.restart(currentLevel.getStartingX(), currentLevel.getStartingY());
         } else {
             //game over
+            interstitial = new Interstitial("Game Over");
+            gameOver = true;
         }
     }
 
