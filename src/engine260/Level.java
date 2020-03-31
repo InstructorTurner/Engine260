@@ -58,16 +58,10 @@ public abstract class Level {
     }
     
     //Now the level is just drawing itself, which is a little better
-    public void draw(GraphicsContext g){
-                
+    public void draw(GraphicsContext g){        
         //draw level stuff
         for(Drawable drawObject : drawableObjects){
             drawObject.draw(g);
-        }
-        
-        //draw win screen
-        if(goalReached){
-            g.fillText("You Win!", 50, 50);
         }
     }
     

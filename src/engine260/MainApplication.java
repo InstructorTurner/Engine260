@@ -120,9 +120,26 @@ public class MainApplication extends Application{
         menu.getChildren().add(pauseButton);
         gamePanel.setTop(menu);
         
+        //Set up a Reset Button
+        Button resetButton = new Button("Reset");
+        menu.getChildren().add(resetButton);
+        
         //set pause button control
         pauseButton.setOnAction((e) -> {
             gm.togglePause();
+        });
+        
+        //set reset button control
+        resetButton.setOnAction((e) -> {
+            loop.stop();
+            PlayerModel newPM = new PlayerModel();
+            PlayerView newPV = new PlayerView(newPM);
+            PlayerController newController = new PlayerController(newPM, newPV, ms);
+            gm.reset(newController);
+            gm.setCurrentLevel(LevelContainer.createLevel1(newController));
+            gm.addLevel(LevelContainer.createLevel2(newController));
+            
+            startStartView(stage);
         });
         
         gameScene = new Scene(gamePanel);

@@ -38,6 +38,15 @@ public class GameManager {
     }
     
     //methods
+    public void reset(PlayerController pc){
+        playerController = pc;
+        paused = false;
+        betweenLevels = false;
+        gameOver = false;
+        interstitialCount = 0;
+        
+        levelList = new LinkedList<>();
+    }
     public void update(){
         //if we're between levels (you just beat a level
         if(betweenLevels){
