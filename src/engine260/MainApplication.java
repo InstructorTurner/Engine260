@@ -10,8 +10,10 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 /**
@@ -65,6 +67,17 @@ public class MainApplication extends Application{
             }
         };
         
+        //Set up a Pause Button and area for other controls
+        HBox menu = new HBox();
+        Button pauseButton = new Button("Pause");
+        menu.getChildren().add(pauseButton);
+        rootPanel.setTop(menu);
+        
+        //set pause button control
+        pauseButton.setOnAction((e) -> {
+            gm.togglePause();
+        });
+        
              
         //plug FX stuff together to start the application
         Scene scene = new Scene(rootPanel);
@@ -81,7 +94,7 @@ public class MainApplication extends Application{
             if(e.getCode() == KeyCode.RIGHT){
                 ms.rightOn();
             }
-            if(e.getCode() == KeyCode.SPACE){
+            if(e.getCode() == KeyCode.Z){
                 ms.jumpOn();
             }
         });
@@ -92,7 +105,7 @@ public class MainApplication extends Application{
             if(e.getCode() == KeyCode.RIGHT){
                 ms.rightOff();
             }
-            if(e.getCode() == KeyCode.SPACE){
+            if(e.getCode() == KeyCode.Z){
                 ms.jumpOff();
             }
         });

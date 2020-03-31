@@ -17,14 +17,17 @@ public class GameManager {
     //attributes
     Level currentLevel;
     PlayerController playerController;
+    boolean paused;
     
     //constructor
     public GameManager(PlayerController pc){
         playerController = pc;
+        paused = false;
     }
     
     //methods
     public void update(){
+        if(!paused){
         //currentLevel.update();
         //update the player
         playerController.update();
@@ -33,7 +36,8 @@ public class GameManager {
         currentLevel.update();
         
         //check for Collisions
-        checkCollisions();
+        checkCollisions(); 
+        }
     }
     
     public void draw(GraphicsContext g){
@@ -104,5 +108,9 @@ public class GameManager {
         } else {
             //game over
         }
+    }
+
+    public void togglePause() {
+        paused = !paused;
     }
 }
