@@ -43,8 +43,11 @@ public class MainApplication extends Application{
         PlayerView pv = new PlayerView(pm);
         PlayerController pc = new PlayerController(pm, pv, ms);
         GameManager gm = new GameManager(pc);
-        Level level1 = new Level(pc);
+        //Create our Levels
+        Level level1 = LevelContainer.createLevel1(pc);
+        Level level2 = LevelContainer.createLevel2(pc);
         gm.setCurrentLevel(level1);
+        gm.addLevel(level2);
         
         AnimationTimer loop = new AnimationTimer(){ //animationTimer will call handle() once every 60th of a second once started
             public void handle(long time){

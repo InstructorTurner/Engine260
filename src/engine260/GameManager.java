@@ -5,6 +5,8 @@
  */
 package engine260;
 
+import java.util.LinkedList;
+import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -16,6 +18,7 @@ public class GameManager {
     
     //attributes
     Level currentLevel;
+    List<Level> levelList;
     PlayerController playerController;
     boolean paused;
     
@@ -23,20 +26,28 @@ public class GameManager {
     public GameManager(PlayerController pc){
         playerController = pc;
         paused = false;
+        
+        levelList = new LinkedList<>();
     }
     
     //methods
     public void update(){
         if(!paused){
-        //currentLevel.update();
-        //update the player
-        playerController.update();
-        
-        //update the level
-        currentLevel.update();
-        
-        //check for Collisions
-        checkCollisions(); 
+            //currentLevel.update();
+            //update the player
+            playerController.update();
+
+            //update the level
+            currentLevel.update();
+
+            //check for Collisions
+            checkCollisions(); 
+
+            //check for goal reached
+            if(currentLevel.goalReached()){
+                goToNextLevel();
+                playerController.restart(currentLevel.getStartingX(), currentLevel.getStartingY());
+            }
         }
     }
     
@@ -48,6 +59,10 @@ public class GameManager {
     
     public void setCurrentLevel(Level level){
         currentLevel = level;
+    }
+    
+    public void addLevel(Level level){
+        levelList.add(level);
     }
     
     
@@ -112,5 +127,12 @@ public class GameManager {
 
     public void togglePause() {
         paused = !paused;
+    }
+    
+    private void goToNextLevel(){
+        if(!levelList.isEmpty()){
+            currentLevel = levelList.get(0);
+            levelList.remove(0);
+        }
     }
 }

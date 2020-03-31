@@ -13,7 +13,7 @@ import javafx.scene.canvas.GraphicsContext;
  *
  * @author Steven Turner
  */
-public class Level {
+public abstract class Level {
     //attributes
     List<Drawable> drawableObjects = new ArrayList<>();
     List<Updateable> updateableObjects = new ArrayList<>();
@@ -26,25 +26,30 @@ public class Level {
     Goal goal;
     
     //constructor
-    public Level(PlayerController pc){
+    public Level(){
         //set up player starting conditions
         startingX = 0;
-        startingY = 180;
+        startingY = 0;
         goalReached = false;
-        playerController = pc;
-        pc.restart(startingX, startingY);
-        
-        //add goal
-        goal = new Goal(200, 190, 10, 10);
-        drawableObjects.add(goal);
-        
-        //create and add platforms
-        addPlatform(0,200,80,10);
-        addPlatformWithEnemy(120, 200, 100, 10);
         
     }
     
     //methods
+    public abstract void initialize(); //should be used to create starting points, goal and create platforms / enemies
+    public void createGoal(int x, int y){
+        this.goal = new Goal(x, y, 10, 10);
+        drawableObjects.add(goal);
+    }
+    public void setStart(int x, int y){
+        startingX = x;
+        startingY = y;
+    }
+    
+    public void setPlayerController(PlayerController pc){
+        this.playerController = pc;
+        pc.restart(startingX, startingY);
+    }
+    
     public void update(){
         //update enemies and platforms
         for(Updateable updateObject : updateableObjects){
@@ -75,6 +80,9 @@ public class Level {
     public Goal getGoal(){
         return goal;
     }
+    public boolean goalReached(){
+        return goalReached;
+    }
     
     public void setGoalReached(){
         goalReached = true;
@@ -88,20 +96,20 @@ public class Level {
     }
     
     
-    private void addPlatform(int x, int y, int width, int height){
+    public void addPlatform(int x, int y, int width, int height){
         Platform platform = new Platform(x,y,width,height);
         platformList.add(platform);
         drawableObjects.add(platform);
     }
     
-    private void addEnemy(Platform p){
+    public void addEnemy(Platform p){
         Enemy enemy = new Enemy(p);
         drawableObjects.add(enemy);
         updateableObjects.add(enemy);
         enemyList.add(enemy);
     }
     
-    private void addPlatformWithEnemy(int x, int y, int width, int height){
+    public void addPlatformWithEnemy(int x, int y, int width, int height){
         Platform platform = new Platform(x,y,width,height);
         platformList.add(platform);
         drawableObjects.add(platform);
