@@ -5,7 +5,6 @@
  */
 package engine260;
 
-import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -88,13 +87,22 @@ public class GameManager {
             //if an enemy hits a player
             if(CollisionManager.isColliding(playerBody, enemy)){
                 //player restarts
-                playerController.restart(currentLevel.getStartingX(), currentLevel.getStartingY());
+                losePlayerLife(); 
             }
             
             //if the enemy has walked off its home platform, turn it around
             if(!CollisionManager.isColliding(enemy, enemy.getHomePlatform())){
                 enemy.reverseDirection();
             }
+        }
+    }
+    
+    private void losePlayerLife(){
+        playerController.loseLife();
+        if(playerController.getLives() > 0){
+            playerController.restart(currentLevel.getStartingX(), currentLevel.getStartingY());
+        } else {
+            //game over
         }
     }
 }

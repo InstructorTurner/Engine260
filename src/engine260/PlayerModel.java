@@ -18,6 +18,7 @@ public class PlayerModel extends PositionalObject implements  Updateable, Horizo
     private boolean falling;
     private boolean jumping;
     private PhysicsRules physics;
+    private int lives;
     
     //constants
     private final int JUMPMAX;
@@ -39,6 +40,9 @@ public class PlayerModel extends PositionalObject implements  Updateable, Horizo
         jumpTimer = 0;
         falling = false;
         jumping = false;
+        
+        //set initial lives
+        lives = 3;
         
     }
     
@@ -137,6 +141,14 @@ public class PlayerModel extends PositionalObject implements  Updateable, Horizo
     }
     public boolean isGrounded(){
         return jumping == false && jumpTimer < JUMPMAX && !falling;
+    }
+    
+    //manage lives
+    public void loseLife(){
+        lives--;
+    }
+    public int getLives(){
+        return lives;
     }
     
 }

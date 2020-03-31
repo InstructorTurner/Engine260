@@ -82,4 +82,10 @@ public class PlayerController implements Updateable, Drawable{
         pm.startFalling();
     }
     
+    public void loseLife(){
+        pm.loseLife();
+    }
+    public int getLives(){
+        return pm.getLives();
+    }
 }

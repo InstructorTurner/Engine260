@@ -24,6 +24,10 @@ public class PlayerView implements Drawable{
     public void draw(GraphicsContext g) {
         g.setFill(Color.RED);
         g.fillRect(pm.getXPosition(), pm.getYPosition(), pm.getWidth(), pm.getHeight());
+        
+        //draw life counter
+        g.setFill(Color.BLACK);
+        g.fillText("Lives: " + Integer.toString(pm.getLives()), 15, 15);
     }
     
 }
