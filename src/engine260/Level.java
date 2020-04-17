@@ -24,6 +24,7 @@ public abstract class Level {
     int startingX;
     int startingY;
     Goal goal;
+    Camera camera;
     
     //constructor
     public Level(){
@@ -31,7 +32,7 @@ public abstract class Level {
         startingX = 0;
         startingY = 0;
         goalReached = false;
-        
+        camera = new Camera();
     }
     
     //methods
@@ -55,14 +56,18 @@ public abstract class Level {
         for(Updateable updateObject : updateableObjects){
             updateObject.update();
         }
+        
+        //check player position and update camera
+        camera.updatePosition(playerController.getPlayerBody());
     }
     
     //Now the level is just drawing itself, which is a little better
     public void draw(GraphicsContext g){        
         //draw level stuff
-        for(Drawable drawObject : drawableObjects){
-            drawObject.draw(g);
-        }
+//        for(Drawable drawObject : drawableObjects){
+//            drawObject.draw(g);
+//        }
+        camera.draw(g, drawableObjects);
     }
     
     public List<Platform> getPlatforms(){
