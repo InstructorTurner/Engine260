@@ -29,5 +29,15 @@ public class PlayerView implements Drawable{
         g.setFill(Color.BLACK);
         g.fillText("Lives: " + Integer.toString(pm.getLives()), 15, 15);
     }
+
+    @Override
+    public void drawShifted(GraphicsContext g, int cameraX, int cameraY) {
+        g.setFill(Color.RED);
+        g.fillRect(pm.getXPosition() - cameraX, pm.getYPosition() - cameraY, pm.getWidth(), pm.getHeight());
+        
+        //draw life counter
+        g.setFill(Color.BLACK);
+        g.fillText("Lives: " + Integer.toString(pm.getLives()), 15, 15);
+    }
     
 }

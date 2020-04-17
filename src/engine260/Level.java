@@ -68,6 +68,7 @@ public abstract class Level {
 //            drawObject.draw(g);
 //        }
         camera.draw(g, drawableObjects);
+        camera.draw(g, playerController);
     }
     
     public List<Platform> getPlatforms(){

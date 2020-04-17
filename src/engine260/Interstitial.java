@@ -28,5 +28,10 @@ public class Interstitial implements Drawable {
         g.setFill(Color.BLACK);
         g.fillText(text, 50, 200);
     }
+
+    @Override
+    public void drawShifted(GraphicsContext g, int cameraX, int cameraY) {
+        draw(g);
+    }
     
 }

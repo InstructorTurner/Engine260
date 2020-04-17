@@ -84,7 +84,7 @@ public class GameManager {
         } else {
             drawBackground(g);
             currentLevel.draw(g);
-            playerController.draw(g);
+            //playerController.draw(g);
         }
     }
     

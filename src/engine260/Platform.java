@@ -31,4 +31,10 @@ public class Platform extends PositionalObject implements Drawable{
         g.fillRect(this.getXPosition(), this.getYPosition(), this.getWidth(), this.getHeight());
     }
 
+    @Override
+    public void drawShifted(GraphicsContext g, int cameraX, int cameraY) {
+        g.setFill(Color.BLUE);
+        g.fillRect(this.getXPosition() - cameraX, this.getYPosition() - cameraY, this.getWidth(), this.getHeight());
+    }
+
 }

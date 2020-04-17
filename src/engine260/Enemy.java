@@ -42,6 +42,12 @@ public class Enemy extends PositionalObject implements Drawable, Updateable, Hor
         g.setFill(Color.BROWN);
         g.fillOval(xPosition, yPosition, width, height);
     }
+    
+    public void drawShifted(GraphicsContext g, int cameraX, int cameraY) {
+        g.setFill(Color.BROWN);
+        g.fillOval(xPosition - cameraX, yPosition - cameraY, width, height);
+    }
+    
 
     @Override
     public void update() {
@@ -69,5 +75,5 @@ public class Enemy extends PositionalObject implements Drawable, Updateable, Hor
     public Platform getHomePlatform(){
         return homePlatform;
     }
-    
+
 }

@@ -5,7 +5,6 @@
  */
 package engine260;
 
-import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -37,8 +36,13 @@ public class Camera {
     }
     public void draw(GraphicsContext g, List<Drawable> drawableObjects){
         for(Drawable drawable : drawableObjects){
-            drawable.draw(g);
+            //drawable.draw(g);
+            drawable.drawShifted(g, xPosition, yPosition);
         }
+    }
+    public void draw(GraphicsContext g, Drawable drawableObject){
+        //drawableObject.draw(g);
+        drawableObject.drawShifted(g, xPosition, yPosition);
     }
     public void updatePosition(CollisionBody trackedBody){
         //canvas is 400 x 400
@@ -48,7 +52,7 @@ public class Camera {
             xPosition = trackedBody.getXPosition() - 300;
         }
         if(trackedBody.getXPosition() - xPosition < 100){
-            xPosition = trackedBody.getXPosition() + 100;
+            xPosition = trackedBody.getXPosition() - 100;
         }
     }
 }

@@ -14,5 +14,6 @@ import javafx.scene.canvas.GraphicsContext;
 public interface Drawable {
     
     public void draw(GraphicsContext g);
+    public void drawShifted(GraphicsContext g, int cameraX, int cameraY);
     
 }

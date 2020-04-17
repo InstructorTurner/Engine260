@@ -59,6 +59,10 @@ public class PlayerController implements Updateable, Drawable{
     public void draw(GraphicsContext g) {
         pv.draw(g);
     }
+    @Override
+    public void drawShifted(GraphicsContext g, int cameraX, int cameraY) {
+        pv.drawShifted(g, cameraX, cameraY);
+    }
     
     public void restart(int x, int y){
         pm.restart(x, y);
@@ -88,4 +92,6 @@ public class PlayerController implements Updateable, Drawable{
     public int getLives(){
         return pm.getLives();
     }
+
+
 }

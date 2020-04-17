@@ -26,4 +26,10 @@ public class Goal extends PositionalObject implements Drawable{
         g.setFill(Color.GREEN);
         g.fillRect(this.getXPosition(), this.getYPosition(), this.getWidth(), this.getHeight());
     }
+
+    @Override
+    public void drawShifted(GraphicsContext g, int cameraX, int cameraY) {
+        g.setFill(Color.GREEN);
+        g.fillRect(this.getXPosition() - cameraX, this.getYPosition() - cameraY, this.getWidth(), this.getHeight());
+    }
 }
