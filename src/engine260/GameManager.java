@@ -5,6 +5,7 @@
  */
 package engine260;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import javafx.scene.canvas.GraphicsContext;
@@ -138,6 +139,9 @@ public class GameManager {
             currentLevel.setGoalReached();
         }
         
+        //set up a list for removals, as removal of objects while iterating can cause issues
+        ArrayList<Bullet> bulletRemovalList = new ArrayList<>();
+        ArrayList<Enemy> enemyRemovalList = new ArrayList<>();
         //check enemy collision
         for(Enemy enemy : currentLevel.getEnemies()){
             //if an enemy hits a player
@@ -150,6 +154,28 @@ public class GameManager {
             if(!CollisionManager.isColliding(enemy, enemy.getHomePlatform())){
                 enemy.reverseDirection();
             }
+            
+            //handle bullets for each enemy
+            for(Bullet bullet : currentLevel.getBullets()){
+                //if a bullet hits an enemy, mark for removal
+                if(CollisionManager.isColliding(enemy, bullet)){
+                    bulletRemovalList.add(bullet);
+                    enemyRemovalList.add(enemy);
+                }
+                
+                //if a bullet is off screen, remove it
+                if(bullet.getXPosition() > 1000){
+                    bulletRemovalList.add(bullet);
+                }
+            }
+        }
+        
+        //remove stuff that was hit
+        for(Enemy enemy : enemyRemovalList){
+            currentLevel.removeEnemy(enemy);
+        }
+        for(Bullet bullet : bulletRemovalList){
+            currentLevel.removeBullet(bullet);
         }
     }
     
@@ -170,10 +196,14 @@ public class GameManager {
     
     private void goToNextLevel(){
         if(!levelList.isEmpty()){
-            currentLevel = levelList.get(0);
+            //currentLevel = levelList.get(0);
+            setCurrentLevel(levelList.get(0));
             levelList.remove(0);
             betweenLevels = true;
             interstitial = new Interstitial("Next Level");
+        } else {
+            interstitial = new Interstitial("You Win!");
+            gameOver = true;
         }
     }
 }

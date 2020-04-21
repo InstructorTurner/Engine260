@@ -19,7 +19,7 @@ public class CollisionManager {
                     primary.getRightSide() >= secondary.getLeftSide()
                     && primary.getLeftSide() <= secondary.getRightSide()
                     && primary.getBottomSide() >= secondary.getTopSide()
-                    && primary.getTopSide() <= primary.getBottomSide()
+                    && primary.getTopSide() <= secondary.getBottomSide()
                 );
     }
     

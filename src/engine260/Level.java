@@ -18,6 +18,7 @@ public abstract class Level {
     List<Drawable> drawableObjects = new ArrayList<>();
     List<Updateable> updateableObjects = new ArrayList<>();
     List<Enemy> enemyList = new ArrayList<>();
+    List<Bullet> bulletList = new ArrayList<>();
     List<Platform> platformList = new ArrayList<>();
     PlayerController playerController;
     boolean goalReached;
@@ -77,6 +78,9 @@ public abstract class Level {
     public List<Enemy> getEnemies(){
         return enemyList;
     }
+    public List<Bullet> getBullets(){
+        return bulletList;
+    }
     public Goal getGoal(){
         return goal;
     }
@@ -119,5 +123,17 @@ public abstract class Level {
     public void addBullet(Bullet b){
         drawableObjects.add(b);
         updateableObjects.add(b);
+        bulletList.add(b);
+    }
+    
+    public void removeEnemy(Enemy e){
+        drawableObjects.remove(e);
+        updateableObjects.remove(e);
+        enemyList.remove(e);
+    }
+    public void removeBullet(Bullet b){
+        drawableObjects.remove(b);
+        updateableObjects.remove(b);
+        bulletList.remove(b);
     }
 }
