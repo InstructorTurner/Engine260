@@ -162,6 +162,9 @@ public class MainApplication extends Application{
             if(e.getCode() == KeyCode.Z){
                 ms.jumpOn();
             }
+            if(e.getCode() == KeyCode.X){
+                ms.shootOn();
+            }
         });
         gameScene.setOnKeyReleased((e) -> {
             if(e.getCode() == KeyCode.LEFT){
@@ -172,6 +175,9 @@ public class MainApplication extends Application{
             }
             if(e.getCode() == KeyCode.Z){
                 ms.jumpOff();
+            }
+            if(e.getCode() == KeyCode.X){
+                ms.shootOff();
             }
         });
         

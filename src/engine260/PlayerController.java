@@ -16,6 +16,7 @@ public class PlayerController implements Updateable, Drawable{
     private PlayerModel pm;
     private PlayerView pv;
     private MovementState ms;
+    private Level currentLevel;
     
     //constructor
     public PlayerController(PlayerModel model, PlayerView view, MovementState movement){
@@ -47,6 +48,13 @@ public class PlayerController implements Updateable, Drawable{
 
         if(ms.getJump() && pm.isGrounded()){ //if we're trying to jump and we're able to...
             pm.jump();
+        }
+        
+        //handle shooting
+        if(ms.getShoot() && this.currentLevel != null){
+            this.currentLevel.addBullet(pm.shoot());
+            //turn off shooting immediately so we don't get a huge stream of bullets
+            ms.shootOff();
         }
         
         //handle friction
@@ -93,5 +101,11 @@ public class PlayerController implements Updateable, Drawable{
         return pm.getLives();
     }
 
+    //shooting
+    public void setLevel(Level level){
+        this.currentLevel = level;
+    }
+    
+    
 
 }

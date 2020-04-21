@@ -115,4 +115,9 @@ public abstract class Level {
         drawableObjects.add(platform);
         addEnemy(platform);
     }
+    
+    public void addBullet(Bullet b){
+        drawableObjects.add(b);
+        updateableObjects.add(b);
+    }
 }

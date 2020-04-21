@@ -151,4 +151,10 @@ public class PlayerModel extends PositionalObject implements  Updateable, Horizo
         return lives;
     }
     
+    //shoot bullets
+    public Bullet shoot(){
+        return new Bullet(this.xPosition, this.yPosition);
+    }
+
+    
 }

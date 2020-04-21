@@ -14,11 +14,13 @@ public class MovementState {
     private boolean left;
     private boolean right;
     private boolean jump;
+    private boolean shoot;
     //constructor
     public MovementState(){
         left = false;
         right = false;
         jump = false;
+        shoot = false;
     }
     //methods
     public void leftOn(){
@@ -39,10 +41,17 @@ public class MovementState {
     public void jumpOff(){
         jump = false;
     }
+    public void shootOn(){
+        shoot = true;
+    }
+    public void shootOff(){
+        shoot = false;
+    }
     
     public boolean getLeft(){return left;}
     public boolean getRight(){return right;}
     public boolean getJump(){return jump;}
+    public boolean getShoot(){return shoot;}
     
     public boolean noDirectionalInput(){
         return !getLeft() && !getRight();

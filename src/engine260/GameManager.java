@@ -90,6 +90,7 @@ public class GameManager {
     
     public void setCurrentLevel(Level level){
         currentLevel = level;
+        playerController.setLevel(currentLevel);
     }
     
     public void addLevel(Level level){
